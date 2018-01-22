@@ -1,274 +1,119 @@
 <?php
-	/**
-	 * Get Post
-	 *
-	 * Tries to fetch a DB item based on $_GET['id']
-	 * Returns false if unable
-	 *
-	 * @param  integer    id of the post to get
-	 * @param  bool|true  $auto_format  whether to format all the posts or not
-	 * @return DB item    or false
-	 */
-	function get_post( $id = 0, $auto_format = true )
-	{
-		// we have no id
-		if ( !$id && !$id = segment(2) ) {
-			return false;
-		}
-
-		// $id must be integer
-		if ( ! filter_var( $id, FILTER_VALIDATE_INT ) ) {
-			return false;
-		}
-
-		global $db;
-
-		$query = $db->prepare( create_posts_query( "WHERE p.id = :id" ) );
-
-		$query->execute([ 'id' => $id ]);
-
-		if ( $query->rowCount() === 1 )
-		{
-			$result = $query->fetch(PDO::FETCH_ASSOC);
-
-			if ( $auto_format ) {
-				$result = format_post( $result, true );
-			} else {
-				return (object) $result;
-			}
-		}
-		else
-		{
-			$result = false;
-		}
-
-		return $result;
-	}
-
-
-
-	/**
-	 * Get Posts
-	 *
-	 * Grabs all posts from the DB
-	 * And maybe formats them too, depending on $auto_format
-	 *
-	 * @param  bool|true  $auto_format  whether to format all the posts or not
-	 * @return array
-	 */
-function get_posts( $auto_format = true )
-	{
-		global $db;
-
-		$query = $db->query( create_posts_query() );
-
-		if ( $query->rowCount() )
-		{
-			$results = $query->fetchAll(PDO::FETCH_ASSOC);
-
-			if ( $auto_format ) {
-				$results = array_map('format_post', $results);
-			}
-		}
-		else
-		{
-			$results = [];
-		}
-
-		return $results;
-	}
-
 /**
- * Get Posts by user
+ * Get tag
  *
  * Tries to fetch a DB item based on $_GET['id']
  * Returns false if unable
  *
- * @param  int    user of the post to get
+ * @param  integer    id of the tag to get
  * @param  bool|true $auto_format whether to format all the posts or not
  *
- * @return DB item    or false
+ * @return object    or false
+ * 
  */
-function get_posts_by_user( $user_id = 0, $auto_format = true ) {
+function get_tag( $id = 0, $auto_format = false ) {
 	// we have no id
-	if ( ! $user_id ) {
-		flash()->warning( "User don't exist" );
-
-		return [ ];
-	}
-
-	global $db;
-
-	$query = $db->prepare( create_posts_query( "WHERE u.id = :uid" ) );
-
-	$query->execute( [ 'uid' => $user_id ] );
-
-	if ( $query->rowCount() ) {
-		$results = $query->fetchAll( PDO::FETCH_ASSOC );
-
-		if ( $auto_format ) {
-			$results = array_map( 'format_post', $results );
-		}
-	} else {
-		$results = [ ];
-	}
-
-	return $results;
-}
-
-/**
- * Get Posts by tag
- *
- * Tries to fetch a DB item based on $_GET['id']
- * Returns false if unable
- *
- * @param  string    tag of the post to get
- * @param  bool|true $auto_format whether to format all the posts or not
- *
- * @return DB item    or false
- */
-function get_posts_by_tag( $tag = '', $auto_format = true ) {
-	// we have no id
-	if ( ! $tag && ! $tag = segment( 2 ) ) {
+	if ( ! $id && ! $id = segment( 2 ) ) {
 		return false;
 	}
 
-	$tag = urldecode( $tag );
-	$tag = filter_var( $tag, FILTER_SANITIZE_STRING );
-
-	global $db;
-
-	$query = $db->prepare( create_posts_query( "WHERE t.tag = :tag" ) );
-
-	$query->execute( [ 'tag' => $tag ] );
-
-	if ( $query->rowCount() ) {
-		$results = $query->fetchAll( PDO::FETCH_ASSOC );
-
-		if ( $auto_format ) {
-			$results = array_map( 'format_post', $results );
-		}
-	} else {
-		$results = [ ];
-	}
-
-	return $results;
-}
-
-
-/**
- * Get Posts by user
- *
- * Tries to fetch a DB item based on $_GET['id']
- * Returns false if unable
- *
- * @param  string    tag of the post to get
- * @param  bool|true $auto_format whether to format all the posts or not
- *
- * @return DB item    or false
- */
-function get_posts_by_user2( $uid, $auto_format = true ) {
-	// we have no id
-	if ( ! $uid && ! $uid = segment( 2 ) ) {
+	// $id must be integer
+	if ( ! filter_var( $id, FILTER_VALIDATE_INT ) ) {
 		return false;
 	}
 
-	$uid = urldecode( $uid );
-	$uid = filter_var( $uid, FILTER_SANITIZE_STRING );
-
 	global $db;
 
-	$query = $db->prepare( "
-		SELECT p.*
-		    FROM posts p
-		    LEFT JOIN users u ON (p.user_id = u.id)
-		    WHERE u.id = :uid
-		    ORDER BY p.created_at DESC		    	
-	" );
+	$query = $db->prepare( create_tag_query( "WHERE p.id = :id" ) );
 
-	$query->execute( [ 'uid' => $uid ] );
+	$query->execute( [ 'id' => $id ] );
 
-	if ( $query->rowCount() ) {
-		$results = $query->fetchAll( PDO::FETCH_ASSOC );
+	if ( $query->rowCount() === 1 ) {
+		$result = $query->fetch( PDO::FETCH_ASSOC );
 
 		if ( $auto_format ) {
-			$results = array_map( 'format_post', $results );
+			$result = format_post( $result, true );
+		} else {
+			return (object) $result;
 		}
 	} else {
-		$results = [ ];
+		$result = false;
 	}
 
-	return $results;
+	return $result;
 }
 
 
 /**
- * Format Post
+ * Get tags
  *
- * Cleans up, sanitizes, formats and generally prepares DB post for displaying
- *
- * @param  $post
- * @param  $format_text
+ * Grabs all tags from the DB
+ * And maybe formats them too, depending on $auto_format
  *
  * @return object
  */
-function format_post( $post, $format_text = false ) {
+function get_tags( $auto_format = true ) {
+	global $db;
 
-	// trim dat shit
-	$post = array_map( 'trim', $post );
+	$query = $db->query( "
+		SELECT * FROM tags
+	" );
 
-	// clean it up
-	$post['title'] = plain( $post['title'] );
-	$post['text']  = plain( $post['text'] );
-	$post['tags']  = $post['tags'] ? explode( '~||~', $post['tags'] ) : [ ];
-	$post['tags']  = array_map( 'plain', $post['tags'] );
+	if ( $query->rowCount() ) {
+		$results = $query->fetchAll( PDO::FETCH_ASSOC );
 
-	// create link to tag [ /tag/id ]
-	if ( $post['tags'] ) {
-		foreach ( $post['tags'] as $tag ) {
-			$post['tag_links'][ $tag ] = BASE_URL . '/tag/' . urlencode( $tag );
-			$post['tag_links'][ $tag ] = filter_var( $post['tag_links'][ $tag ], FILTER_SANITIZE_URL );
+		if ( $auto_format ) {
+			$results = array_map( 'format_tag', $results );
 		}
+	} else {
+		$results = [ ];
 	}
 
-	// create link to post [ /post/:id/:slug ]
-	$post['link'] = get_post_link( $post );
-
-	// let's go on some dates
-	$post['timestamp'] = strtotime( $post['created_at'] );
-	$post['time']      = str_replace( ' ', '&nbsp', date( 'j M Y, G:i', $post['timestamp'] ) );
-	$post['date']      = date( 'Y-m-d', $post['timestamp'] );
-
-	// don't tease me, bro
-	$post['teaser'] = word_limiter( $post['text'], 40 );
-
-	// format text
-	if ( $format_text ) {
-		$post['text'] = filter_url( $post['text'] );
-		$post['text'] = add_paragraphs( $post['text'] );
-	}
-
-	$post['email']     = filter_var( $post['email'], FILTER_SANITIZE_EMAIL );
-	$post['user_link'] = BASE_URL . '/user/' . $post['user_id'];
-	$post['user_link'] = filter_var( $post['user_link'], FILTER_SANITIZE_URL );
-
-	return (object) $post;
+	return (object) $results;
 }
 
+
 /**
- * Create posts query
+ * Format tag
+ *
+ * Cleans up, sanitizes, formats and generally prepares DB post for displaying
+ *
+ * @param  $tag
+ * @param  $format_text
+ *
+ * @return object [id, name, link, editlink, deletelink]
+ */
+function format_tag( $tag, $format_text = false ) {
+
+	// trim dat shit
+	$tag = array_map( 'trim', $tag );
+
+	// clean it up
+	$tag['id']   = plain( $tag['id'] );
+	$tag['name'] = plain( $tag['tag'] );
+	unset($tag['tag']);
+
+	// create link to user [ /post/:id/:slug ]
+	$tag['link'] = get_tag_link( $tag['name'] );
+	$tag['editlink'] = get_tag_edit_link( $tag['name'] );
+	$tag['deletelink'] = get_tag_delete_link( $tag['name'] );
+
+	return (object) $tag;
+}
+
+
+/**
+ * Create tags query
  *
  * @param string $where
  *
  * @return string
  */
-function create_posts_query( $where = '' ) {
+function create_tag_query( $where = '' ) {
 	$query = "
-		SELECT p.*, u.username, u.email, u.role, GROUP_CONCAT(t.tag SEPARATOR '~||~') AS tags
-	    FROM posts p
-	    LEFT JOIN posts_tags pt ON (p.id = pt.post_id)
-	    LEFT JOIN tags t ON (t.id = pt.tag_id)
-	    LEFT JOIN users u ON (u.id = p.user_id)
+		SELECT * FROM tags t
+			LEFT JOIN posts_tags pt ON t.id = pt.tag_id
+			LEFT JOIN posts p ON p.id = pt.post_id
 	";
 
 	if ( $where ) {
@@ -282,207 +127,80 @@ function create_posts_query( $where = '' ) {
 
 }
 
-function get_post_link( $post, $type = 'post' ) {
+/**
+ * zmeni znaky + na medzery z daneho segmentu
+ * 
+ * @param int $index
+ *
+ * @return string
+ */
+function segment_tag_decode($index) {
+	return str_replace('+', ' ', segment($index));
+}
 
-	if ( is_object( $post ) ) {
-		$id   = $post->id;
-		$slug = $post->slug;
+/**
+ * get tag link [/tag/id] or [/tag/name]
+ * @param $tag
+ * @param string $type
+ *
+ * @return mixed|string
+ */
+function get_tag_link( $tag, $type = 'tag' ) {
+
+	if ( ! is_string( $tag ) ) {
+		if ( is_object( $tag ) ) {
+			$id = $tag->id;
+		} else {
+			$id = $tag['id'];
+		}
+		$link = BASE_URL . "/$type/$id";
+
 	} else {
-		$id   = $post['id'];
-		$slug = $post['slug'];
+		$tag = str_replace(' ', '+', $tag);
+		$link = BASE_URL . "/$type/$tag";
 	}
-
-	$link = BASE_URL . "/$type/$id";
-
-	if ( $type === 'post' ) {
-		$link .= "/$slug";
-	}
-
 	$link = filter_var( $link, FILTER_SANITIZE_URL );
 
 	return $link;
 }
 
-function get_edit_link( $post ) {
-	return get_post_link( $post, 'edit' );
-}
-
-function get_delete_link( $post ) {
-	return get_post_link( $post, 'delete' );
-}
-
-function get_author_link( $post ) {
-
-	if ( is_object( $post ) ) {
-		$user_id = $post->user_id;
-	} else {
-		$user_id = $post['user_id'];
-	}
-
-	$link = BASE_URL . "/user/$user_id";
-
-	$link = filter_var( $link, FILTER_SANITIZE_URL );
+/**
+ * create add tag link
+ * @param string $type
+ *
+ * @return string
+ */
+function get_tag_add_link( $type = 'add_tag' ) {
+	$link = BASE_URL . "/$type";
 
 	return $link;
 }
 
-function get_author( $post ) {
-
-	if ( is_object( $post ) ) {
-		$user_id = $post->user_id;
-	} else {
-		$user_id = $post['user_id'];
-	}
-
-	global $auth;
-
-	$user = $auth->getUser( $user_id );
-
-	return $user['email'];
-}
-
-function get_author_uid( $post ) {
-
-	if ( is_object( $post ) ) {
-		$user_id = $post->user_id;
-	} else {
-		$user_id = $post['user_id'];
-	}
-
-	global $auth;
-
-	$user = $auth->getUser( $user_id );
-
-	return $user['uid'];
-}
-
-function get_all_tags( $post_id = 0 ) {
-
-	global $db;
-
-	$query = $db->query( "
-		SELECT * FROM tags
-	" );
-
-	$results = $query->rowCount() ? $query->fetchAll( PDO::FETCH_OBJ ) : [ ];
-
-	if ( $post_id ) {
-		$query = $db->prepare( "
-			SELECT t.id FROM tags t
-			JOIN posts_tags pt ON t.id = pt.tag_id
-			WHERE pt.post_id = :pid
-		" );
-
-		$query->execute( [
-			'pid' => $post_id
-		] );
-
-		if ( $query->rowCount() ) {
-
-			$tags_for_post = $query->fetchAll( PDO::FETCH_COLUMN );
-
-			foreach ( $results as $key => $tag ) {
-				if ( in_array( $tag->id, $tags_for_post ) ) {
-					$results[ $key ]->checked = true;
-				}
-			}
-		}
-	}
-
-	return $results;
+/**
+ * create tag edit link
+ * @param $tag
+ *
+ * @return mixed|string
+ */
+function get_tag_edit_link( $tag ) {
+	return get_tag_link( $tag, 'edit_tag' );
 }
 
 /**
- * Validate post
+ * create tag delete link
+ * @param $tag
  *
- * Sanitize and Validate
- *
- * @return array|bool
+ * @return mixed|string
  */
-function validate_post() {
-
-
-	$title = filter_input( INPUT_POST, 'title', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES );
-	$text  = filter_input( INPUT_POST, 'text', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES );
-	$tags  = filter_input( INPUT_POST, 'tags', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY );
-
-	if ( isset( $_POST['post_id'] ) ) {
-		$post_id = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
-
-		// id is required and has to be int
-		if ( ! $post_id ) {
-			flash()->error( 'what are you trying to pull here' );
-		}
-	} else {
-		$post_id = false;
-	}
-
-
-	// title is required
-	if ( ! $title = trim( $title ) ) {
-		flash()->error( "you forgot your title dummy" );
-	}
-
-	// text is required
-	if ( ! $text = trim( $text ) ) {
-		flash()->error( 'you forgot your text dummy' );
-	}
-
-	// if we have error messages, validation didn't well
-	if ( flash()->hasMessages() ) {
-		$_SESSION['form_data'] = [
-			'title' => $title,
-			'text'  => $text,
-			'tags'  => $tags ?: [ ]
-		];
-
-		return false;
-	}
-
-	return compact(
-		'post_id', 'title', 'text', 'tags',
-		$post_id, $title, $text, $tags
-	);
-}
-
-/**
- * Get tags for post
- * vracia ciselne hodnoty tagov priradenych k postu
- *
- * @param int $post_id - cislo postu
- * @param int $type - ak je 'string' vracia hodnoty pola ako stringy, inak int
- *
- * @return array|bool
- */
-function get_tags_by_post( $post_id, $type = 0 ) {
-
-	global $db;
-
-	if ( $post_id ) {
-		$query = $db->prepare( "
-			SELECT tag_id FROM posts_tags
-			WHERE post_id = :post_id
-		" );
-
-		$query->execute( [
-			'post_id' => $post_id
-		] );
-		$result = $query->fetchAll( PDO::FETCH_COLUMN );
-		if ( $type === 'string' ) {
-			$result = array_map( 'strval', $result );
-		}
-
-		return $result;
-	}
-
-	return false;
+function get_tag_delete_link( $tag ) {
+	return get_tag_link( $tag, 'delete_tag' );
 }
 
 
 /**
  * diff tags
  * porovnava tagy prispevku
- *
+ * vrati true ak su rozdielne
  * @param array $arr1
  * @param array $arr2
  *
@@ -510,16 +228,36 @@ function diff_tags( $arr1, $arr2 ) {
  *
  * @return int
  */
-function insert_tags( $tags, $post_id = 0 ) {
+function insert_tags_to_post( $tags, $post_id = 0 ) {
 
 	global $db;
+	
+	
 
 	if ( isset( $tags ) && $tags = array_filter( $tags ) ) {
+		// kontrola ci je tag v tabulke tags
+		foreach ($tags as $tag) {
+
+			// ak nie je v tabulke tags tak sa tam vlozi
+			if (!is_tag($tag)) {
+				$query = $db->prepare("
+					INSERT INTO tags (tag)
+					VALUES (:tag)
+				");
+				$query->execute([
+					'tag' => $tag
+				]);
+			}
+		}
+		
 		$insert_tags = $db->prepare( "
 				INSERT INTO posts_tags
 				VALUES (:post_id, :tag_id)
 			" );
-		foreach ( $tags as $tag_id ) {
+		
+		$tags_id = get_tags_id($tags);
+		
+		foreach ( $tags_id as $tag_id ) {
 
 			$insert_tags->execute( [
 				'post_id' => $post_id,
@@ -530,3 +268,262 @@ function insert_tags( $tags, $post_id = 0 ) {
 		return $insert_tags->rowCount();
 	}
 }
+
+/**
+ * Vrati true ak je tag zapisany v tabulke tags
+ * ak je $get_id 1 funkcia vrati id tagu
+ *
+ * @param string $tag
+ * @param int $get_id
+ *
+ * @return bool | int
+ */
+function is_tag($tag, $get_id = 0) {
+
+	$tag = trim( $tag );
+	$tag = filter_var( $tag, FILTER_SANITIZE_STRING );
+
+	global $db;
+
+	$query = $db->prepare("
+		SELECT id FROM tags
+		WHERE tag = :tag
+	");
+	
+	$query->execute([
+		'tag' => $tag
+	]);
+	
+	$id = $query->fetch(PDO::FETCH_COLUMN);
+	$row = $query->rowCount();
+	
+	if ($row) {
+		if ($get_id == 1) {
+			return $id;
+		}
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Add tag to db tab
+ *
+ * @param string $tag
+ *
+ * @return int
+ */
+function add_tag( $tag ) {
+
+	$tag = trim( $tag );
+	$tag = filter_var( $tag, FILTER_SANITIZE_STRING );
+
+	global $db;
+
+	if ( isset( $tag ) && $tag != '' ) {
+		$add_tag = $db->prepare( "
+				INSERT INTO tags (tag)
+				VALUES (:tag)
+			" );
+
+		$add_tag->execute( [
+			'tag' => $tag
+		] );
+
+		if ( $add_tag->rowCount() ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * edit tag
+ *
+ * @param int $tag_id
+ * @param string $tag
+ *
+ * @return bool
+ */
+function edit_tag( $tag_id, $tag ) {
+
+	$tag    = trim( $tag );
+	$tag    = filter_var( $tag, FILTER_SANITIZE_STRING );
+	$tag_id = filter_var( $tag_id, FILTER_VALIDATE_INT );
+
+	global $db;
+
+	if ( isset( $tag_id ) && is_int( $tag_id ) ) {
+		$query = $db->prepare( "
+				UPDATE tags
+				SET tag = :tag
+				WHERE id = :tag_id
+			" );
+
+		$query->execute( [
+			'tag_id' => $tag_id,
+			'tag'    => $tag
+		] );
+
+		if ( $query->rowCount() ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * delete tag
+ *
+ * @param int $tag_id
+ *
+ * @return bool
+ */
+function delete_tag( $tag_id ) {
+
+	$tag_id = filter_var( $tag_id, FILTER_VALIDATE_INT );
+
+	global $db;
+
+	if ( isset( $tag_id ) && is_int( $tag_id ) ) {
+		$query = $db->prepare( "
+				DELETE FROM tags
+				WHERE id = :tag_id
+			" );
+
+		$query->execute( [
+			'tag_id' => $tag_id
+		] );
+
+		if ( $query->rowCount() ) {
+
+			$query = $db->prepare( "
+				DELETE FROM posts_tags
+				WHERE tag_id = :tag_id
+			" );
+
+			$query->execute( [
+				'tag_id' => $tag_id
+			] );
+
+			if ( $query->rowCount() ) {
+				flash()->info('tag sa nepoužíval');
+			}
+				return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Get tag_id
+ *
+ * @param string $tag
+ *
+ * @return bool| (object) int tag_id
+ */
+function get_tag_id( $tag ) {
+
+	$tag = trim( $tag );
+	$tag = filter_var( $tag, FILTER_SANITIZE_STRING );
+
+	if ( $tag == '' ) {
+		return false;
+	}
+
+	global $db;
+
+	$query = $db->prepare( "
+		SELECT t.id FROM tags t
+		WHERE t.tag = :tag
+	" );
+
+	$query->execute( [ 'tag' => $tag ] );
+
+	if ( ! $query->rowCount() ) {
+		return false;
+	}
+	$tag_id = $query->fetch( PDO::FETCH_OBJ );
+
+	return $tag_id->id;
+
+}
+
+/**
+ * Get tags_id
+ *
+ * @param array $tags
+ *
+ * @return bool| array tag_id
+ */
+function get_tags_id( $tags ) {
+
+	if (empty($tags)) {
+		return false;
+	}
+
+	if (is_string($tags)) {
+		$tags = explode(',', $tags);
+		$tags = array_map('trim', $tags);
+	}
+
+	global $db;
+	$i = 0;
+	$result = [];
+
+	$query = $db->prepare( "
+		SELECT t.id FROM tags t
+		WHERE t.tag = :tag
+	" );
+
+	foreach ($tags as $tag) {
+		$tag = trim($tag);
+		if ( $tag == '' ) {
+			return false;
+		}
+		$query->execute( [ 'tag' => $tag ] );
+		$result[$i] = $query->fetch( PDO::FETCH_COLUMN );
+		$i++;
+	}
+
+	if ( ! $query->rowCount() ) {
+		return false;
+	}
+	return $result;
+}
+
+/**
+ * vrati obsah db tags
+ * @return array|bool
+ */
+function get_all_tags() {
+	
+	global $db;
+	
+	$query = $db->prepare("
+		SELECT * FROM tags
+	");
+
+	$query->execute();
+	
+	$result = $query->fetchAll(PDO::FETCH_KEY_PAIR);
+	
+	if ($query->rowCount()) {
+		return $result;
+	}
+	return false;
+}
+
+
+function add_tag_from_post($post_tags) {
+
+	$all_tags = get_all_tags();
+
+	$new_tags = array_filter($post_tags, $all_tags);
+	return $new_tags;
+
+}
+

@@ -7,29 +7,30 @@
  */
 require_once '_inc/config.php';
 
-var_dump( $_SESSION );
-if ($_SESSION['reset']) {
-	$uid = $_SESSION['reset']['uid'];
-	$uid = filter_var($uid, FILTER_VALIDATE_INT);
-	unset($_SESION['reset']);
-} else {
-	flash()->error('not found data');
-	redirect('/');
-}
-var_dump($post_reset);
+
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
-	
-	die();
-	$post_reset = $auth->setNewPassword($uid, $newpassword, $repeatnewpassword);
-	
-	
+
+	if ( $_SESSION['reset'] ) {
+		$uid = $_SESSION['reset']['uid'];
+		$uid = filter_var( $uid, FILTER_VALIDATE_INT );
+		unset( $_SESSION['reset'] );
+	} else {
+		$uid = $_POST['uid'];
+	}
+
+	if ( ! isset( $uid ) ) {
+		flash()->error( 'not found data' );
+		redirect( '/' );
+	}
+
+	$reset = $auth->setNewPassword( $uid, $_POST['newpassword'], $_POST['repeatnewpassword'] );
+
 	if ( $reset['error'] ) {
 		flash()->error( $reset['message'] );
 	} else {
 		flash()->success( $reset['message'] );
-		redirect( '/' );
+		redirect( "/login" );
 	}
-
 }
 
 
@@ -43,6 +44,7 @@ include_once '_partials/header.php';
 		Set new password
 	</h2>
 
+	<input type="hidden" name="uid" value="<?= $uid ?>" placeholder="Password" class="form-control" required>
 	<input type="text" name="newpassword" value="" placeholder="Password" class="form-control" required>
 	<input type="text" name="repeatnewpassword" value="" placeholder="Password" class="form-control" required>
 	<button type="submit" class="btn btn-lg btn-primary btn-block">Set new password</button>

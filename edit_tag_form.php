@@ -2,54 +2,41 @@
 
 
 try {
-	$post = get_post( segment( 2 ), false );
+	$tag = segment_tag_decode(2);
 
 } catch ( PDOException $e ) {
 	// also handle errors maybe
 	$results = [ ];
 }
-if ( ! $post ) {
+if ( ! $tag ) {
 	flash()->error( "doesn't exist :(" );
 	redirect( '/' );
 }
 
-$page_title = 'Edit / ' . $post->title;
+$page_title = 'Edit / ' . $tag;
+$tag_id     = get_tag_id( $tag );
 
 include_once "_partials/header.php";
 ?>
 
 	<section class="box">
-		<form action="<?= BASE_URL ?>/admin/edit-item.php" method="post" class="post">
+		<form action="<?= BASE_URL ?>/admin/edit-tag.php" method="post" class="post">
 			<header class="post-header">
 				<h1 class="box-heading">
-					Edit &ldquo; <?= plain( $post->title ) ?> &rdquo;
+					Edit &ldquo; <?= plain( $tag ) ?> &rdquo;
 				</h1>
 			</header>
 
 			<div class="form-group">
-				<input type="text" name="title" class="form-control" value="<?= $post->title ?>" placeholder="title">
+				<input type="text" name="tag" class="form-control" value="<?= plain( $tag ) ?>" placeholder="tag">
 			</div>
 
-			<div class="form-group">
-				<textarea name="text" rows="16" class="form-control"
-				          placeholder="write your shit"><?= $post->text ?></textarea>
-			</div>
 
 			<div class="form-group">
-				<?php foreach ( get_all_tags( $post->id ) as $tag ) : ?>
-					<label class="checkbox">
-						<input type="checkbox" name="tags[]" value="<?= $tag->id ?>"
-							<?= isset( $tag->checked ) && $tag->checked ? 'checked' : '' ?>>
-						<?= plain( $tag->tag ) ?>
-					</label>
-				<?php endforeach; ?>
-			</div>
-
-			<div class="form-group">
-				<input name="post_id" value="<?= $post->id ?>" type="hidden">
-				<button type="submit" class="btn btn-primary">Edit post</button>
+				<input name="tag_id" value="<?= $tag_id ?>" type="hidden">
+				<button type="submit" class="btn btn-primary">Edit tag</button>
 			    <span class="or">
-				    or <a href="<?= get_post_link( $post ) ?>">cancel</a>
+				    or <a href="<?= get_tag_link( $tag ) ?>">cancel</a>
 			    </span>
 			</div>
 		</form>

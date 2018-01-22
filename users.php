@@ -15,6 +15,7 @@
 	}
 
 
+
 include_once "_partials/header.php";
 ?>
 	<section class="box post-list">
@@ -26,9 +27,17 @@ include_once "_partials/header.php";
 						<?= $user->username ?>
 					</a>
 				</h3>
+				<? if ( is_admin() ): ?>
+					<div class="pull-right">
+						<a href="<?= get_edit_user_link( $user ) ?>" class="btn btn-xs edit-link">edit</a>
+						<!--						<a href="-->
+						<? //= get_ban_user_link( $user ) ?><!--" class="btn btn-xs edit-link">ban</a>-->
+						<a href="<?= get_delete_user_link( $user ) ?>" class="btn btn-xs edit-link">&times;</a>
+					</div>
+				<? endif; ?>
 				<ul class="user-list">
 					<li>
-						typ: &nbsp;
+						rola: &nbsp;
 						<?= $user->role ?>
 					</li>
 					<li>

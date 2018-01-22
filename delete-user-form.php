@@ -2,9 +2,9 @@
 
 
 try {
-	$post = get_post( segment( 2 ) );
+	$user = get_user( segment( 2 ) );
 
-	if ( ! post_permition( $post ) ) {
+	if ( ! can_edit( $user ) ) {
 		flash()->info( 'You must by author' );
 		redirect( '/' );
 	}
@@ -13,18 +13,18 @@ try {
 	$results = [ ];
 }
 
-if ( ! $post ) {
+if ( ! $user ) {
 	flash()->error( "doesn't exist :(" );
 	redirect( '/' );
 }
 
-$page_title = 'Delete / ' . $post->title;
+$page_title = 'Delete / ' . $user->username;
 
 include_once "_partials/header.php";
 ?>
 
 	<section class="box">
-		<form action="<?= BASE_URL ?>/admin/delete-item.php" method="post" class="post">
+		<form action="<?= BASE_URL ?>/admin/delete-user.php" method="post" class="post">
 			<header class="post-header">
 				<h1 class="box-heading">
 					Sure you wanna do this?
@@ -32,15 +32,14 @@ include_once "_partials/header.php";
 			</header>
 
 			<blockquote class="form-group">
-				<h3>&ldquo;<?= $post->title ?>&rdquo;</h3>
-				<p class="teaser"><?= $post->teaser ?></p>
+				<h3>&ldquo;<?= $user->username ?>&rdquo;</h3>
 			</blockquote>
 
 			<div class="form-group">
-				<input name="post_id" value="<?= $post->id ?>" type="hidden">
-				<button type="submit" class="btn btn-primary">Delete post</button>
+				<input name="user_id" value="<?= $user->id ?>" type="hidden">
+				<button type="submit" class="btn btn-primary">Delete user</button>
 			    <span class="or">
-				    or <a href="<?= get_post_link( $post ) ?>">cancel</a>
+				    or <a href="<?= get_user_link( $user ) ?>">cancel</a>
 			    </span>
 			</div>
 		</form>

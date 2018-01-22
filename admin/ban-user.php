@@ -1,6 +1,6 @@
 <?php
 
-	// include
+// include
 require '../_inc/config.php';
 
 if ( ! logged_in() ) {
@@ -21,12 +21,12 @@ if ( ! can_edit( $user ) ) {
 	flash()->error( "what are you trying pull here" );
 	redirect( 'back' );
 }
-
+die();
 // add new title and text
 $user = get_user( $user_id );
 
 $delete = $db->prepare( "
-		DELETE FROM users
+		UPDATE users
 		WHERE id = :user_id
 	" );
 

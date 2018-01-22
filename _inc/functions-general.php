@@ -102,7 +102,8 @@
 		}
 		else
 		{
-			$page = ltrim($page, '/');
+			$page     = str_replace( BASE_URL, '', $page );
+			$page     = ltrim( $page, '/' );
 			$location = BASE_URL . "/$page";
 		}
 

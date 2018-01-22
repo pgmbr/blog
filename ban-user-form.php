@@ -18,13 +18,13 @@ if ( ! $user ) {
 	redirect( '/' );
 }
 
-$page_title = 'Delete / ' . $user->username;
+$page_title = 'Blocked / ' . $user->username;
 
 include_once "_partials/header.php";
 ?>
 
 	<section class="box">
-		<form action="<?= BASE_URL ?>/admin/delete-user.php" method="post" class="post">
+		<form action="<?= BASE_URL ?>/admin/ban-user.php" method="post" class="post">
 			<header class="post-header">
 				<h1 class="box-heading">
 					Sure you wanna do this?
@@ -37,7 +37,7 @@ include_once "_partials/header.php";
 
 			<div class="form-group">
 				<input name="user_id" value="<?= $user->id ?>" type="hidden">
-				<button type="submit" class="btn btn-primary">Delete user</button>
+				<button type="submit" class="btn btn-primary">Blocked user</button>
 			    <span class="or">
 				    or <a href="<?= get_user_link( $user ) ?>">cancel</a>
 			    </span>

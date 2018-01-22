@@ -1,4 +1,5 @@
 $(function() {
+	$('#edit-form').find('#tags-checkfield').hide();
   $('input, select').on('change', function(event) {
     var $element = $(event.target),
       $container = $element.closest('.example');

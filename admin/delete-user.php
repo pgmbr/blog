@@ -1,6 +1,6 @@
 <?php
 
-	// include
+// include
 require '../_inc/config.php';
 
 if ( ! logged_in() ) {
@@ -9,44 +9,35 @@ if ( ! logged_in() ) {
 
 
 // validate
-$post_id = filter_input( INPUT_POST, 'post_id', FILTER_VALIDATE_INT );
+$user_id = filter_input( INPUT_POST, 'user_id', FILTER_VALIDATE_INT );
 
 // id is required and has to be int
-if ( ! $post_id || ! $post = get_post( $post_id, false ) ) {
+if ( ! $user_id || ! $user = get_user( $user_id ) ) {
 	flash()->error( 'no such post' );
 	redirect( 'back' );
 }
 
-if ( ! can_edit( $post ) ) {
+if ( ! can_edit( $user ) ) {
 	flash()->error( "what are you trying pull here" );
 	redirect( 'back' );
 }
 
 // add new title and text
-$post = get_post( $post_id, false );
+$user = get_user( $user_id );
 
 $delete = $db->prepare( "
-		DELETE FROM posts
-		WHERE id = :post_id
+		DELETE FROM users
+		WHERE id = :user_id
 	" );
 
 $delete->execute( [
-	'post_id' => $post_id
+	'user_id' => $user_id
 ] );
 
 if ( ! $delete ) {
 	flash()->warning( 'sorry bitch' );
 	redirect( 'back' );
 }
-
-$query = $db->prepare( "
-						DELETE FROM posts_tags
-						WHERE post_id = :post_id
-				" );
-
-$query->execute( [
-	'post_id' => $post_id
-] );
 
 flash()->success( 'goodbye, sweet post' );
 redirect( '/' );

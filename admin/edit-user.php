@@ -3,121 +3,71 @@
 // include
 require '../_inc/config.php';
 
+
+// var_dump( $_POST );
+
 if ( ! logged_in() ) {
 	redirect( '/' );
 }
 
 
-// validate
-if ( ! $data = validate_post() ) {
+// validate [$user_id, $username, $email, $role]
+if ( ! $data = validate_user() ) {
 	redirect( 'back' );
-	}
-// extract $post_id, $title, $text, $tags
+}
+// extract [$user_id, $username, $email, $role]
 extract( $data );
 
 // add new title and text
-if ( ! $post = get_post( $post_id, false ) ) {
-	flash()->error( "no such post" );
+if ( ! $user = get_user( $user_id, false ) ) {
+	flash()->error( "no such user" );
 	redirect( 'back' );
 }
 
-if ( ! can_edit( $post ) ) {
+if ( ! can_edit( $user ) ) {
 	flash()->error( "what are you trying to pull here" );
 	redirect( 'back' );
 }
+// create query
+$query = "UPDATE users SET ";
 
-$row_post = 0;
-$row_tags = 0;
+$query_username = 'username = :username';
+$query_email    = 'email = :email';
+$query_role     = 'role = :role';
 
-/**
- * diff tags
- */
-$arr1 = $_POST['tags'];
-$arr2 = get_tags_by_post( $post_id, 'string' );
+$execute = [ 'user_id' => $user_id ];
+
+// update username
+if ( $user->username !== $_POST['username'] ) {
+	$query .= $query_username . ', ';
+	$execute['username'] = $username;
+}
+if ( $user->email !== $_POST['email'] ) {
+	$query .= $query_email . ', ';
+	$execute['email'] = $email;
+}
+if ( $user->role !== $_POST['role'] ) {
+	$query .= $query_role . ', ';
+	$execute['role'] = $role;
+}
+$query = rtrim( $query, ' ,' );
+$query .= " WHERE id = :user_id";
 
 
-if ( $post->title === $_POST['title'] && $post->text === $_POST['text'] && ! diff_tags( $arr1, $arr2 ) ) {
+if ( $user->username === $_POST['username'] && $user->email === $_POST['email'] && $user->role === $_POST['role'] ) {
 	flash()->warning( "You changed nothing, you fuck" );
 	redirect( 'back' );
-} elseif ( $post->title !== $_POST['title'] && $post->text === $_POST['text'] ) {
-
-	$update_post = $db->prepare( "
-			UPDATE  posts
-			SET 
-				title = :title
-			WHERE 
-				id = :post_id
-		" );
-
-	$update_post->execute( [
-		'title'   => $title,
-		'post_id' => $post_id
-	] );
-
-	$row_post = $update_post->rowCount();
-
-} elseif ( $post->title === $_POST['title'] && $post->text !== $_POST['text'] ) {
-
-	$update_post = $db->prepare( "
-			UPDATE  posts
-			SET 
-				text = :text
-			WHERE 
-				id = :post_id
-		" );
-
-	$update_post->execute( [
-		'text'    => $text,
-		'post_id' => $post_id
-	] );
-
-	$row_post = $update_post->rowCount();
-
-} elseif ( $post->title !== $_POST['title'] && $post->text !== $_POST['text'] ) {
-
-	$update_post = $db->prepare( "
-			UPDATE  posts
-			SET 
-				title = :title, 
-				text = :text
-			WHERE 
-				id = :post_id
-		" );
-
-	$update_post->execute( [
-		'title'   => $title,
-		'text'    => $text,
-		'post_id' => $post_id
-	] );
-
-	$row_post = $update_post->rowCount();
-
-
+} else {
+	$update_user = $db->prepare( $query );
+	$update_user->execute( $execute );
 }
 
-if ( diff_tags( $arr1, $arr2 ) ) {
-	// remove all tags for this post
-	$delete_post = $db->prepare( "
-					DELETE FROM posts_tags
-					WHERE post_id = :post_id
-			" );
-
-	$delete_post->execute( [
-		'post_id' => $post_id
-	] );
-
-	// if we have tags, add them
-
-	$row_tags = insert_tags( $tags, $post->id );
+if ( $update_user->rowCount() ) {
+	flash()->success( 'edit user done' );
+	redirect( '/' );
+} else {
+	flash()->warning( 'sorry, wrong write to db' );
+	redirect( 'back' );
 }
 
 
-// redirect
-if ( $row_post || $row_tags ) {
-	flash()->success( 'yay, changed it!' );
-	redirect( get_post_link( $post ) );
-}
-
-
-flash()->warning( 'sorry girl' );
-	redirect('back');

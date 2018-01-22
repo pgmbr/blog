@@ -7,52 +7,31 @@
  */
 
 	try {
-		$results = get_users();
+		$results = get_tags();
 	}
 	catch (PDOException $e) {
 		// also handle errors maybe
 		$results = [];
 	}
 
-
-
 include_once "_partials/header.php";
 ?>
 	<section class="box post-list">
-		<h1 class="box-heading text-muted">Admin users</h1>
-		<?php if (count($results)) : foreach ($results as $user) :  ?>
-			<article id="user-<?= $user->id ?>" class="post">
+		<h1 class="box-heading text-muted">List all tags</h1>
+		<?php if (count($results)) : foreach ($results as $tag) :  ?>
+			<article id="tag-<?= $tag->id ?>" class="post">
 				<h3 class="post-header">
-					<a href="<?= $user->link ?>">
-						<?= $user->username ?>
+					<a href="<?= $tag->link ?>">
+						<?= $tag->name ?>
 					</a>
+					<? if ( is_admin() || is_mod() ): ?>
+						<div class="pull-right">
+							<a href="<?= $tag->editlink ?>" class="btn btn-xs edit-link">edit</a>
+							<a href="<?= $tag->deletelink ?>" class="btn btn-xs edit-link">&times;</a>
+						</div>
+					<? endif; ?>
 				</h3>
-				<? if ( is_admin() ): ?>
-					<div class="pull-right">
-						<a href="<?= get_edit_user_link( $user ) ?>" class="btn btn-xs edit-link">edit</a>
-						<!--						<a href="-->
-						<? //= get_ban_user_link( $user ) ?><!--" class="btn btn-xs edit-link">ban</a>-->
-						<a href="<?= get_delete_user_link( $user ) ?>" class="btn btn-xs edit-link">&times;</a>
-					</div>
-				<? endif; ?>
-				<ul class="user-list">
-					<li>
-						rola: &nbsp;
-						<?= $user->role ?>
-					</li>
-					<li>
-						mail: &nbsp;
-						<a href="<?= $user->email ?>"><?= $user->email ?></a>
-					</li>
-					<li>
-						založený: &nbsp;
-						<time datetime="<?= $user->date ?>">
-							<small><?= $user->time ?></small>
-						</time>
-					</li>
-				</ul>
-				<div class="post-content">
-				</div>
+
 				<hr>
 			</article>
 		<?php endforeach; else: ?>

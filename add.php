@@ -1,54 +1,41 @@
 <?php
 
-try {
-	$post = get_post(segment(2), false);
-}
-catch (PDOException $e) {
-	// also handle errors maybe
-	$results = [];
-}
-
-if (!$post) {
-	flash()->error("doesn't exist :(");
-	redirect('/');
-}
-
-$page_title = 'Edit / ' . $post->title;
+$page_title = 'Add new';
 
 include_once "_partials/header.php";
+
+if ( isset( $_SESSION['form_data'] ) ) {
+	extract( $_SESSION['form_data'] );
+	unset( $_SESSION['form_data'] );
+}
 ?>
 
     <section class="box">
-	    <form action="<?= BASE_URL ?>/admin/edit-item.php" method="post" class="post">
+	    <form action="<?= BASE_URL ?>/admin/add-item.php" method="post" class="post">
 		    <header class="post-header">
-			    <h1 class="box-heading">
-				    Edit &ldquo; <?= plain($post->title) ?> &rdquo;
-			    </h1>
+			    <h1 class="box-heading">Add new post</h1>
 		    </header>
 
 		    <div class="form-group">
-			    <input type="text" name="title" class="form-control" value="<?= $post->title ?>" placeholder="title" >
+			    <input type="text" name="title" class="form-control" placeholder="title" value="<?= $title ?: '' ?>">
 		    </div>
 
 		    <div class="form-group">
-			    <textarea name="text" rows="16" class="form-control" placeholder="write your shit" ><?= $post->text ?></textarea>
+			    <textarea name="text" rows="16" class="form-control"
+			              placeholder="write your shit"><?= $text ?: '' ?></textarea>
 		    </div>
 
 		    <div class="form-group">
-			    <?php foreach (get_all_tags($post->id) as $tag) : ?>
-				    <label class="checkbox">
-					    <input type="checkbox" name="tags[]" value="<?= $tag->id ?>"
-					    <?= isset($tag->checked) && $tag->checked ? 'checked' : '' ?>>
-					    <?= plain($tag->tag) ?>
-				    </label>
-				<?php endforeach; ?>
+			    <input type="text" data-role="tagsinput" name="tagsinput" class="form-control" value="<?= $tags ?>" placeholder="write tags" >
 		    </div>
 
+		    <?php //include_once '_partials/edit-old-tags-form.php'?>
+
+
 		    <div class="form-group">
-			    <input name="post_id" value="<?= $post->id ?>" type="hidden">
-			    <button type="submit" class="btn btn-primary">Edit post</button>
+			    <button type="submit" class="btn btn-primary">Add new post</button>
 			    <span class="or">
-				    or <a href="<?= get_post_link($post) ?>">cancel</a>
+				    or <a href="<?= BASE_URL ?>">cancel</a>
 			    </span>
 		    </div>
 	    </form>

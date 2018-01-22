@@ -7,20 +7,16 @@
  */
 require_once '_inc/config.php';
 
+
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
-	$email    = filter_input( INPUT_POST, 'email', FILTER_SANITIZE_EMAIL );
-	$remember = filter_input( INPUT_POST, 'rememberMe', FILTER_SANITIZE_STRING );
-	$password = $_POST['password'];
+	$email = filter_input( INPUT_POST, 'email', FILTER_SANITIZE_EMAIL );
+	$reset = $auth->requestReset( $email );
 
-	$login = $auth->login( $email, $password, isset( $remember ) );
-
-	if ( $login['error'] ) {
-		flash()->error( $login['message'] );
+	if ( $reset['error'] ) {
+		flash()->error( $reset['message'] );
 	} else {
-		do_login( $login );
-
-		flash()->success( 'You are logged' );
+		flash()->success( $reset['message'] );
 		redirect( '/' );
 	}
 
@@ -34,21 +30,17 @@ include_once '_partials/header.php';
 
 <form method="post" action="" class="box box-auth">
 	<h2 class="box-auth-heading">
-		Login
+		Reset password
 	</h2>
 
 	<input type="text" name="email" value="" placeholder="Email Address" class="form-control" required>
-	<input type="password" name="password" placeholder="Password" class="form-control" required>
-	<button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-	<label class="checkbox">
-		<input type="checkbox" name="rememberMe" id="rememberMe" value="remember-me" checked>
-		Remember me
-	</label>
+	<button type="submit" class="btn btn-lg btn-primary btn-block">Reset password</button>
+
 
 	<p class="alt-action text-center">
 		or <a href="<?= BASE_URL ?>/register">Register</a>
 	</p>
 	<p class="alt-action text-center">
-		<a href="<?= BASE_URL ?>/reset">Resend password</a>
+		or <a href="<?= BASE_URL ?>/login">login</a>
 	</p>
 </form>
