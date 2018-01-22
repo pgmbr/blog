@@ -1,41 +1,52 @@
 <?php
 
 	// include
-	require 'config.php';
+require '../_inc/config.php';
 
-	// add new stuff
-	$id = $database->insert("items", [
-		"text" => $_POST["message"]
-	]);
+if ( ! logged_in() ) {
+	redirect( '/' );
+}
 
 
-	if ( is_ajax() )
-	{
-		header('Content-Type: application/json');
+// validate
+if ( ! $data = validate_post() ) {
+	redirect( 'back' );
+}
 
-		if (!$id) {
-			$message = json_encode([
-				'status' => 'error',
-				'message' => 'something went wrong:('
-			]);
-		} else {
-			$message = json_encode([
-				'status' => 'success',
-				'id' => $id
-			]);
-		}
+extract( $data );
+$slug = slugify( $title );
 
-		die( $message );
-	}
-	/*else
-	{
-		redirect("index");
-	}*/
-	// success?
-	if ( ! $id ) {
-		flash()->error('Something went wrong:(');
-	} else {
-		flash()->success('Yay, hello new item!');
+// add new post to db
+$query = $db->prepare( "
+		INSERT INTO posts
+			(user_id, title, text, slug)
+		VALUES
+			(:user_id, :title, :text, :slug)
+	" );
+
+$insert = $query->execute( [
+	'user_id' => get_user()->uid,
+	'title'   => $title,
+	'text'    => $text,
+	'slug'    => $slug
+] );
+
+if ( ! $insert ) {
+	flash()->warning( 'sorry girl' );
+	redirect( 'back' );
 	}
 
-redirect('index.php');
+// great success
+$post_id = $db->lastInsertId();
+
+
+// if we have tags, add them
+insert_tags_to_post( $tagsinput, $post_id );
+
+// let's visit new post
+flash()->success( 'yay, new one!' );
+
+redirect( get_post_link( [
+	'id'   => $post_id,
+	'slug' => $slug
+] ) );

@@ -1,71 +1,75 @@
 <?php
 $lang = array();
 
-$lang['user_blocked'] = "Váš účet je v současné době zablokován.";
-$lang['user_verify_failed'] = "Ověření kódu captcha selhalo.";
+$lang['user_blocked']       = "Váš účet je v súčasnej dobe zablokovaný.";
+$lang['user_verify_failed'] = "Overenie kódu captcha zlyhalo.";
 
-$lang['email_password_invalid'] = "Neplatná e-mailová adresa nebo heslo.";
-$lang['email_password_incorrect'] = "Nesprávná e-mailová adresa nebo heslo.";
-$lang['remember_me_invalid'] = "Neplatná hodnota políčka zapamatovat si mě.";
+$lang['email_password_invalid']   = "Neplatná e-mailová adresa alebo heslo.";
+$lang['email_password_incorrect'] = "Nesprávná e-mailová adresa alebo heslo.";
+$lang['remember_me_invalid']      = "Neplatná hodnota políčka zapamätať si ma.";
 
-$lang['password_short'] = "Heslo je příliš krátké.";
-$lang['password_weak'] = "Heslo je příliš slabé.";
-$lang['password_nomatch'] = "Hesla nejsou shodná.";
-$lang['password_changed'] = "Heslo úspěšně změněno.";
-$lang['password_incorrect'] = "Současné heslo je nesprávné.";
-$lang['password_notvalid'] = "Heslo je neplatné.";
+$lang['password_short']     = "Heslo je príliš krátké.";
+$lang['password_weak']      = "Heslo je príliš slabé.";
+$lang['password_nomatch']   = "Hesla nie su zhodné.";
+$lang['password_changed']   = "Heslo úspešne zmenené.";
+$lang['password_incorrect'] = "Súčasné heslo je nesprávné.";
+$lang['password_notvalid']  = "Heslo je neplatné.";
 
-$lang['newpassword_short'] = "Nové heslo je příliš krátké.";
-$lang['newpassword_long'] = "Nové heslo je příliš dlouhé.";
-$lang['newpassword_invalid'] = "Nové heslo musí obsahovat aspoň jedno velké písmeno, aspoň jedno malé písmeno a aspoň jednu číslici.";
-$lang['newpassword_nomatch'] = "Nová hesla nejsou shodná.";
-$lang['newpassword_match'] = "Nové heslo je stejné jako staré heslo.";
+$lang['newpassword_short']   = "Nové heslo je príliš krátké.";
+$lang['newpassword_long']    = "Nové heslo je príliš dlhé.";
+$lang['newpassword_invalid'] = "Nové heslo musí obsahovať aspoň jedno velké písmeno, aspoň jedno malé písmeno a aspoň jednu číslicu.";
+$lang['newpassword_nomatch'] = "Nová hesla nie su zhodné.";
+$lang['newpassword_match']   = "Nové heslo je rovnaké ako staré heslo.";
 
-$lang['email_short'] = "E-mailová adresa je příliš krátká.";
-$lang['email_long'] = "E-mailová adresa je příliš dlouhá.";
-$lang['email_invalid'] = "E-mailová adresa je neplatná.";
-$lang['email_incorrect'] = "E-mailová adresa je nesprávná.";
-$lang['email_banned'] = "Tato e-mailová adresa je zakázána.";
-$lang['email_changed'] = "E-mailová adresa úspěšně změněna.";
+$lang['email_short']      = "E-mailová adresa je príliš krátká.";
+$lang['email_long']       = "E-mailová adresa je príliš dlhá.";
+$lang['email_invalid']    = "E-mailová adresa je neplatná.";
+$lang['email_incorrect']  = "E-mailová adresa je nesprávná.";
+$lang['email_banned']     = "Tato e-mailová adresa je zakázána.";
+$lang['email_changed']    = "E-mailová adresa úspešne zmenená.";
+$lang['username_changed'] = "Uživatelské meno úspešne zmenené.";
+$lang['role_changed']     = "Úloha úspešne zmenená.";
 
-$lang['newemail_match'] = "Nová e-mailová adresa je stejná jako stará.";
+$lang['newemail_match']    = "Nová e-mailová adresa je rovnaká ako stará.";
+$lang['newusername_match'] = "Nové uživatelské meno je rovnaké ako staré.";
+$lang['newrole_match']     = "Nová úloha je rovnaká ako stará.";
 
-$lang['account_inactive'] = "Účet dosud nebyl aktivován.";
-$lang['account_activated'] = "Účet byl aktivován.";
+$lang['account_inactive']  = "Účet doposial nebol aktivovaný.";
+$lang['account_activated'] = "Účet bol aktivovaný.";
 
-$lang['logged_in'] = "Jste přihlášen/a.";
-$lang['logged_out'] = "Jste odhlášen/a.";
+$lang['logged_in']  = "Ste prihlásený/á.";
+$lang['logged_out'] = "Ste odhlásený/á.";
 
-$lang['system_error'] = "Nastala systémová chyba. Prosím, zkuste to znovu.";
+$lang['system_error'] = "Nastala systémová chyba. Prosím, skúste to znovu.";
 
-$lang['register_success'] = "Účet byl vytvořen. Na vaši e-mailovou adresu byl zaslán aktivační e-mail.";
-$lang['register_success_emailmessage_suppressed'] = "Účet vytvořen.";
-$lang['email_taken'] = "Tato e-mailová adresa je již používána.";
+$lang['register_success']                         = "Účet bol vytvorený. Na vašu e-mailovú adresu bol zaslaný aktivačný e-mail.";
+$lang['register_success_emailmessage_suppressed'] = "Účet vytvorený.";
+$lang['email_taken']                              = "Táto e-mailová adresa je už používaná.";
 
-$lang['resetkey_invalid'] = "Klíč ke změně hesla je neplatný.";
-$lang['resetkey_incorrect'] = "Klíč ke změně hesla je nesprávný.";
-$lang['resetkey_expired'] = "Platnost klíče ke změně hesla vypršela.";
-$lang['password_reset'] = "Heslo bylo úspěšně změněno.";
+$lang['resetkey_invalid']   = "Klúč k zmene hesla je neplatný.";
+$lang['resetkey_incorrect'] = "Klúč k zmene hesla je nesprávny.";
+$lang['resetkey_expired']   = "Platnosť klúča k zmene hesla vypršala.";
+$lang['password_reset']     = "Heslo bolo úspešne zmenené.";
 
-$lang['activationkey_invalid'] = "Aktivační klíč je neplatný.";
-$lang['activationkey_incorrect'] = "Aktivační klíč je nesprávný.";
-$lang['activationkey_expired'] = "Platnost aktivačního klíče vypršela.";
+$lang['activationkey_invalid']   = "Aktivačný klúč je neplatný.";
+$lang['activationkey_incorrect'] = "Aktivačný klúč je nesprávny.";
+$lang['activationkey_expired']   = "Platnosť aktivačného klúča vypršala.";
 
-$lang['reset_requested'] = "Požadavek na změnu hesla byl odeslán na e-mailovou adresu.";
-$lang['reset_requested_emailmessage_suppressed'] = "Požadavek na změnu hesla byl vytvořen.";
-$lang['reset_exists'] = "Požadavek na změnu hesla již existuje.";
+$lang['reset_requested']                         = "Požiadavka na zmenu hesla bola odoslaná na e-mailovú adresu.";
+$lang['reset_requested_emailmessage_suppressed'] = "Požiadavka na zmenu hesla bola vytvorená.";
+$lang['reset_exists']                            = "Požiadavka na zmenu hesla už existuje.";
 
-$lang['already_activated'] = "Účet byl již aktivován.";
-$lang['activation_sent'] = "Aktivační e-mail byl odeslán.";
-$lang['activation_exists'] = "Aktivační e-mail byl již odeslán.";
+$lang['already_activated'] = "Účet bol už aktivovaný.";
+$lang['activation_sent']   = "Aktivačný e-mail bol odoslaný.";
+$lang['activation_exists'] = "Aktivačný e-mail bol už odoslaný.";
 
-$lang['email_activation_subject'] = '%s - Aktivace účtu';
-$lang['email_activation_body'] = 'Dobrý den,<br/><br/> abyste se mohli přihlásit do svého účtu, musíte jej nejdřív aktivovat kliknutím na tento odkaz : <strong><a href="%1$s/%2$s">%1$s/%2$s</a></strong><br/><br/> Pak musíte vložit následující aktivační klíč: <strong>%3$s</strong><br/><br/> Pokud jste se v poslední době neregistrovali na %1$s, znamená to, že tento e-mail byl odeslán omylem a můžete jej ignorovat.';
-$lang['email_activation_altbody'] = 'Dobrý den,' . "\n\n" . 'abyste se mohli přihlásit do svého účtu, musíte jej nejdřív aktivovat kliknutím na tento odkaz :' . "\n" . '%1$s/%2$s' . "\n\n" . 'Pak musíte vložit následující aktivační klíč: %3$s' . "\n\n" . 'Pokud jste se v poslední době neregistrovali na %1$s, znamená to, že tento e-mail byl odeslán omylem a můžete jej ignorovat.';
+$lang['email_activation_subject'] = '%s - Aktivácia účtu';
+$lang['email_activation_body']    = 'Dobrý deň,<br/><br/> abyste sa mohli prihlásiť do svojho účtu, musíte ho najskôr aktivovať kliknutím na tento odkaz : <strong><a href="%1$s/%2$s">%1$s/%2$s</a></strong><br/><br/> Potom musíte vložiť nasledujúci aktivačný klúč: <strong>%3$s</strong><br/><br/> Pokial ste sa v poslednej dobe neregistrovali na %1$s, znamená to, že tento e-mail bol odoslaný omylom a môžete ho ignorovať.';
+$lang['email_activation_altbody'] = 'Dobrý deň,' . "\n\n" . 'abyste sa mohli prihlásiť do svojho účtu, musíte ho najskôr aktivovať kliknutím na tento odkaz :' . "\n" . '%1$s/%2$s' . "\n\n" . 'Potom musíte vložiť nasledujúci aktivačný klúč: %3$s' . "\n\n" . 'Pokial ste sa v poslednej dobe neregistrovali na %1$s, znamená to, že tento e-mail bol odoslaný omylom a môžete ho ignorovať.';
 
-$lang['email_reset_subject'] = '%s - Žádost o změnu hesla';
-$lang['email_reset_body'] = 'Dobrý den,<br/><br/>abyste mohli změnit svoje heslo, musíte nejprve kliknout na následující odkaz :<br/><br/><strong><a href="%1$s/%2$s">%1$s/%2$s</a></strong><br/><br/>Pak musíte vložit následující klíč pro změnu hesla: <strong>%3$s</strong><br/><br/>Pokud jste v poslední době nežádali o změnu hesla na %1$s, znamená to, že tento e-mail byl odeslán omylem a můžete jesj ignorovat.';
-$lang['email_reset_altbody'] = 'Dobrý den, ' . "\n\n" . 'abyste mohli změnit svoje heslo, musíte nejprve kliknout na následující odkaz :' . "\n" . '%1$s/%2$s' . "\n\n" . 'Pak musíte vložit následující klíč pro změnu hesla: %3$s' . "\n\n" . 'Pokud jste v poslední době nežádali o změnu hesla na %1$s, znamená to, že tento e-mail byl odeslán omylem a můžete jej ignorovat.';
+$lang['email_reset_subject'] = '%s - Žiadosť o zmenu hesla';
+$lang['email_reset_body']    = 'Dobrý deň,<br/><br/>abyste mohli zmenit svoje heslo, musíte najprv kliknúť na nasledujúci odkaz :<br/><br/><strong><a href="%1$s/%2$s/%3$s">%1$s/%2$s/%3$s</a></strong><br/><br/>Potom musíte vložiť nasledujúci klúč pre zmenu hesla: <strong>%3$s</strong><br/><br/>Pokial ste v poslednej dobe nežiadali o zmenu hesla na %1$s, znamená to, že tento e-mail bol odoslaný omylom a môžete ho ignorovať.';
+$lang['email_reset_altbody'] = 'Dobrý deň, ' . "\n\n" . 'abyste mohli zmeniť svoje heslo, musíte najprv kliknúť na následujúci odkaz :' . "\n" . '%1$s/%2$s' . "\n\n" . 'Potom musíte vložiť nasledujúci klúč pre zmenu hesla: %3$s' . "\n\n" . 'Pokial ste v poslednej dobe nežiadali o zmenu hesla na %1$s, znamená to, že tento e-mail bol odoslaný omylom a môžete ho ignorovať.';
 
-$lang['account_deleted'] = "Účet byl úspěšně smazán.";
-$lang['function_disabled'] = "Tato funkce byla deaktivována.";
+$lang['account_deleted']   = "Účet bol úspešne zmazaný.";
+$lang['function_disabled'] = "Táto funkcia bola deaktivovaná.";
