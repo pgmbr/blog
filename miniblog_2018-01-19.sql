@@ -269,11 +269,11 @@ LOCK TABLES `users` WRITE;
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `isactive`, `dt`, `role`)
 VALUES
-	(1,'Dimitry','dimitry@email.com','$2y$10$aS64G1l.nU1DTIE.9MlMB.n6rT36aSBDG24KcEjBWnXtu9nwqxAnK',1,'2018-01-07 00:18:37','user'),
-	(2,'Pepovovic','pepo.g@centrum.sk','$2y$10$Iul60Su6sqGMhbzIGta3sembS4X9ZFWu4UovPCZpwJHEG0cVztIDm',1,'2018-01-07 01:52:12','user'),
-	(3,'Petrik','peter@gmbr.sk','$2y$10$WHozrVwNesuooqx5DUXvMuqf7PgeyL9/FmHeG00iEzzbV5DHxoWyK',1,'2018-01-08 10:32:02','admin'),
-	(4,'Neluška','77nelinka@gmail.sk','$2y$10$X.d34XQ/y4xfjkTQgzk8JemNSwnyNGub29s9JxuNwJAHDz7ZGcEMy',1,'2018-01-08 10:51:21','mod'),
-	(5,'demo','peppo@gmbr.sk','$2y$10$uIvyJJ4GaHjMh.gSbYfm4uKsJy4Qm2j5S1dPBk9tUcqCZBsKwQx2.',1,'2018-01-17 13:43:12','user');
+	(1,'Dimitry','dimitry@email.ru','$2y$10$aS64G1l.nU1DTIE.9MlMB.n6rT36aSBDG24KcEjBWnXtu9nwqxAnK',1,'2018-01-07 00:18:37','user'),
+	(2,'Sergei','sergei@centrum.sk','$2y$10$Iul60Su6sqGMhbzIGta3sembS4X9ZFWu4UovPCZpwJHEG0cVztIDm',1,'2018-01-07 01:52:12','user'),
+	(3,'Jimmy','james@bush.sk','$2y$10$WHozrVwNesuooqx5DUXvMuqf7PgeyL9/FmHeG00iEzzbV5DHxoWyK',1,'2018-01-08 10:32:02','admin'),
+	(4,'Anakin','dart.vader@death-star.com','$2y$10$X.d34XQ/y4xfjkTQgzk8JemNSwnyNGub29s9JxuNwJAHDz7ZGcEMy',1,'2018-01-08 10:51:21','mod'),
+	(5,'demo','dtrump@lenon.sk','$2y$10$uIvyJJ4GaHjMh.gSbYfm4uKsJy4Qm2j5S1dPBk9tUcqCZBsKwQx2.',1,'2018-01-17 13:43:12','user');
 
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
